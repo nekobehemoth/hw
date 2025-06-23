@@ -6,5 +6,6 @@ public class HelloWorld {
         System.out.println("Hello World!");
         System.out.println("New feature");
         System.out.println("Really cool stuff");
+        System.out.println("Another feature");
     }
 }
