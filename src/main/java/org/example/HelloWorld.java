@@ -7,5 +7,6 @@ public class HelloWorld {
         System.out.println("New feature");
         System.out.println("Really cool stuff");
         System.out.println("Another feature");
+        System.out.println("Test feature");
     }
 }
