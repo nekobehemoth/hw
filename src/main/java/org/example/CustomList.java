@@ -1,5 +1,6 @@
 package org.example;
 
+import java.io.ObjectStreamException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -9,7 +10,7 @@ public class CustomList implements List {
 
 
     private int size;
-    Object[] array;
+    private Object[] array;
 
 
     private final static int DEFAULT_CAPACITY = 10;
@@ -35,8 +36,9 @@ public class CustomList implements List {
 
     @Override
     public boolean contains(Object o) {
-        for (Object currObject : this.array) {
-            if (currObject.equals(0)) return true;
+        if (o == null) return false;
+        for (int i = 0; i < size; i++){
+            if (o.equals(array[i])) return true;
         }
         return false;
     }
@@ -72,6 +74,15 @@ public class CustomList implements List {
 
     @Override
     public boolean remove(Object o) {
+        for (int i = 0; i < size; i++) {
+            if (o.equals(array[i])) {
+                int newSize = size - 1;
+                System.arraycopy(array, i + 1, array, i, newSize - 1);
+                size = newSize;
+                array[size] = null;
+                return true;
+            }
+        }
         return false;
     }
 
@@ -92,17 +103,25 @@ public class CustomList implements List {
 
     @Override
     public Object get(int index) {
-        return null;
+        return array[index];
     }
 
     @Override
     public Object set(int index, Object element) {
-        return null;
+        Object oldValue = array[index];
+        array[index] = element;
+        return oldValue;
     }
 
     @Override
     public void add(int index, Object element) {
-
+        int size = this.size;
+        int newSize = size + 1;
+        Object[] result = new Object[newSize];
+        System.arraycopy(array, index - 1, result, index, newSize - index);
+        System.arraycopy(array, 0, result, 0, index);
+        result[index] = element;
+        array = result;
     }
 
     @Override
