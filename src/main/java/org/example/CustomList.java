@@ -1,12 +1,9 @@
 package org.example;
 
 import java.io.ObjectStreamException;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
-public class CustomList implements List {
+public class CustomList<E> implements List<E> {
 
 
     private int size;
@@ -36,9 +33,14 @@ public class CustomList implements List {
 
     @Override
     public boolean contains(Object o) {
-        if (o == null) return false;
-        for (int i = 0; i < size; i++){
-            if (o.equals(array[i])) return true;
+        if (o == null) {
+            for (int i = 0; i < size; i++){
+                if (array[i] == null) return true;
+            }
+        } else {
+            for (int i = 0; i < size; i++) {
+                if (o.equals(array[i])) return true;
+            }
         }
         return false;
     }
@@ -50,7 +52,7 @@ public class CustomList implements List {
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        return Arrays.copyOf(array, size);
     }
 
     @Override
@@ -76,10 +78,7 @@ public class CustomList implements List {
     public boolean remove(Object o) {
         for (int i = 0; i < size; i++) {
             if (o.equals(array[i])) {
-                int newSize = size - 1;
-                System.arraycopy(array, i + 1, array, i, newSize - 1);
-                size = newSize;
-                array[size] = null;
+                helpRemove(i);
                 return true;
             }
         }
@@ -98,19 +97,25 @@ public class CustomList implements List {
 
     @Override
     public void clear() {
-
+        for (int i = 0; i < size; i++) {
+            array[i] = null;
+        }
+        size = 0;
     }
 
     @Override
-    public Object get(int index) {
-        return array[index];
+    @SuppressWarnings("unchecked")
+    public E get(int index) {
+        Objects.checkIndex(index, size);
+        return (E) array[index];
     }
 
     @Override
-    public Object set(int index, Object element) {
-        Object oldValue = array[index];
+    @SuppressWarnings("unchecked")
+    public E set(int index, E element) {
+        E oldValue = (E) array[index];
         array[index] = element;
-        return oldValue;
+        return (E) oldValue;
     }
 
     @Override
@@ -125,10 +130,24 @@ public class CustomList implements List {
     }
 
     @Override
-    public Object remove(int index) {
-        return null;
+    @SuppressWarnings("unchecked")
+    public E remove(int index) {
+        Objects.checkIndex(index, size);
+        E deleted;
+        deleted =  (E) array[index];
+        helpRemove(index);
+        return deleted;
     }
 
+
+    private void helpRemove(int index) {
+        int newSize = size - 1;
+        Object[] result = new Object[newSize];
+        System.arraycopy(array, index + 1, result, index, newSize - index);
+        System.arraycopy(array, 0, result, 0, index);
+        array = result;
+        size = newSize;
+    }
     @Override
     public int indexOf(Object o) {
         return 0;
@@ -170,7 +189,10 @@ public class CustomList implements List {
     }
 
     @Override
-    public Object[] toArray(Object[] a) {
-        return new Object[0];
+    @SuppressWarnings("unchecked")
+    public <T> T[] toArray(T[] a) {
+        //if (a.length < size) return (T[]) Arrays.copyOf(array, size, a.getClass());
+
+        return (T[]) Arrays.copyOf(array, size, a.getClass());
     }
 }
