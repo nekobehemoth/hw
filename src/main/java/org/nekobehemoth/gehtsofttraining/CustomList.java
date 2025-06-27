@@ -1,6 +1,5 @@
-package org.example;
+package org.nekobehemoth.gehtsofttraining;
 
-import java.io.ObjectStreamException;
 import java.util.*;
 
 public class CustomList<E> implements List<E> {

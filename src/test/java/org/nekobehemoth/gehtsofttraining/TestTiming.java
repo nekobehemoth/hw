@@ -1,4 +1,4 @@
-package org.example;
+package org.nekobehemoth.gehtsofttraining;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.extension.AfterAllCallback;
