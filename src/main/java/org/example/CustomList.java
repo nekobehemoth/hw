@@ -5,10 +5,8 @@ import java.util.*;
 
 public class CustomList<E> implements List<E> {
 
-
     private int size;
     private Object[] array;
-
 
     private final static int DEFAULT_CAPACITY = 10;
     private final static Object[] DEFAULT_EMPTY_LIST = {};
@@ -18,7 +16,21 @@ public class CustomList<E> implements List<E> {
     }
 
     public CustomList(int initCapacity) {
-        if (initCapacity > 0) this.array = new Object[size];
+        if (initCapacity > 0) this.array = new Object[initCapacity];
+    }
+
+    public CustomList(Collection<? extends E> c) {
+        Object[] newArray = c.toArray();
+        size = newArray.length;
+        if (newArray.length != 0) {
+            if (c.getClass() == CustomList.class) {
+                array = newArray;
+            } else {
+                array = Arrays.copyOf(newArray, size, Object[].class);
+            }
+        } else {
+            array = DEFAULT_EMPTY_LIST;
+        }
     }
 
     @Override
@@ -43,11 +55,6 @@ public class CustomList<E> implements List<E> {
             }
         }
         return false;
-    }
-
-    @Override
-    public Iterator iterator() {
-        return null;
     }
 
     @Override
@@ -82,16 +89,6 @@ public class CustomList<E> implements List<E> {
                 return true;
             }
         }
-        return false;
-    }
-
-    @Override
-    public boolean addAll(Collection c) {
-        return false;
-    }
-
-    @Override
-    public boolean addAll(int index, Collection c) {
         return false;
     }
 
@@ -148,6 +145,22 @@ public class CustomList<E> implements List<E> {
         array = result;
         size = newSize;
     }
+
+
+
+    //Features for future implementation
+
+    @Override
+    public boolean addAll(Collection c) {
+        return false;
+    }
+
+    @Override
+    public boolean addAll(int index, Collection c) {
+        return false;
+    }
+
+
     @Override
     public int indexOf(Object o) {
         return 0;
@@ -194,5 +207,10 @@ public class CustomList<E> implements List<E> {
         //if (a.length < size) return (T[]) Arrays.copyOf(array, size, a.getClass());
 
         return (T[]) Arrays.copyOf(array, size, a.getClass());
+    }
+
+    @Override
+    public Iterator iterator() {
+        return null;
     }
 }

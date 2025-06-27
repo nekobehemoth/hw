@@ -35,12 +35,23 @@ public class PerformanceTest {
     @ParameterizedTest(name = "{0} exec time and memory usage for adding 10000 records and deleting them from the first element")
     @MethodSource("listRealisation")
     void testAddingAndDeleting(String arrayName, List<Integer> list){
-        for (int i = 0; i <= 10000; i++) {
+        for (int i = 0; i < 10000; i++) {
             list.add(i);
         }
-        for (int i = 0; i <= 10000; i++) {
+        for (int i = 0; i < 10000; i++) {
             list.remove(0);
         }
 
+    }
+
+
+    @ParameterizedTest(name = "{0} exec time and memory usage for adding million records")
+    @MethodSource("listRealisation")
+    void testAddingMillionElementsAndCheckIfContains(String arrayName, List<Integer> list){
+        for (int i = 0; i < 100000000; i++) {
+            list.add(i);
+        }
+
+        assertTrue(list.contains(999999));
     }
 }

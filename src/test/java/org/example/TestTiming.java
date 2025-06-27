@@ -13,8 +13,6 @@ import java.util.logging.Logger;
 
 public class TestTiming implements BeforeTestExecutionCallback, AfterTestExecutionCallback, AfterAllCallback {
 
-    private static final Logger logger = Logger.getLogger(TestTiming.class.getName());
-
     private static final String START_TIME = "start time";
     private static final String START_MEMORY = "start memory";
     private final Runtime runtime = Runtime.getRuntime();
