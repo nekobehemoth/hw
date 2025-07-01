@@ -1,22 +1,21 @@
 package org.nekobehemoth.gehtsofttraining;
 
-import org.junit.jupiter.api.AfterAll;
+import lombok.Getter;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import javax.sound.midi.Soundbank;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.logging.Logger;
 
-public class TestTiming implements BeforeTestExecutionCallback, AfterTestExecutionCallback, AfterAllCallback {
+public class TestTiming implements BeforeTestExecutionCallback, AfterTestExecutionCallback {
 
     private static final String START_TIME = "start time";
     private static final String START_MEMORY = "start memory";
     private final Runtime runtime = Runtime.getRuntime();
 
+    @Getter
     private static final Map<String, Map<String, List<Double>>> report =
             new HashMap<>();
 
@@ -54,19 +53,4 @@ public class TestTiming implements BeforeTestExecutionCallback, AfterTestExecuti
         return context.getStore(ExtensionContext.Namespace.create(getClass(), context.getRequiredTestMethod()));
     }
 
-    @Override
-    public void afterAll(ExtensionContext extensionContext) throws Exception {
-        report.forEach((testMethod, implementation) -> {
-            System.out.println();
-            System.out.println("Test results for method: " + testMethod);
-            implementation.forEach((implementationName, metric) -> {
-                double execTime = metric.get(0);
-                double usedMemory = metric.get(1);
-                System.out.printf("%s: average time: %.3f ms, memory usage: %.3f MB%n", implementationName, execTime, usedMemory);
-            });
-        } );
-
-
-
-    }
 }

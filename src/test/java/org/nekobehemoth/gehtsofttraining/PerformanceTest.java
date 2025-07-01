@@ -1,6 +1,8 @@
 package org.nekobehemoth.gehtsofttraining;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -47,10 +49,24 @@ public class PerformanceTest {
     @ParameterizedTest(name = "{0} exec time and memory usage for adding million records")
     @MethodSource("listRealisation")
     void testAddingMillionElementsAndCheckIfContains(String arrayName, List<Integer> list){
-        for (int i = 0; i < 100000000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             list.add(i);
         }
 
         assertTrue(list.contains(999999));
+    }
+
+
+    @AfterAll
+    public static void afterAll() throws Exception {
+        TestTiming.getReport().forEach((testMethod, implementation) -> {
+            System.out.println();
+            System.out.println("Test results for method: " + testMethod);
+            implementation.forEach((implementationName, metric) -> {
+                double execTime = metric.get(0);
+                double usedMemory = metric.get(1);
+                System.out.printf("%s: average time: %.3f ms, memory usage: %.3f MB%n", implementationName, execTime, usedMemory);
+            });
+        } );
     }
 }
