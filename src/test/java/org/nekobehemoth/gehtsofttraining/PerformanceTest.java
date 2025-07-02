@@ -47,7 +47,7 @@ public class PerformanceTest {
     @ParameterizedTest(name = "{0} exec time and memory usage for adding million records")
     @MethodSource("listRealisation")
     void testAddingMillionElementsAndCheckIfContains(String arrayName, List<Integer> list){
-        for (int i = 0; i < 100000000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             list.add(i);
         }
 
