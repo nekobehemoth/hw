@@ -3,15 +3,9 @@ package org.nekobehemoth.hw02.fibonacci;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.nekobehemoth.gehtsofttraining.TestTiming;
 import org.nekobehemoth.utils.PerformanceTestUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Stream;
 
 @ExtendWith(TestTiming.class)
 public class FibonacciPerformanceTest {
