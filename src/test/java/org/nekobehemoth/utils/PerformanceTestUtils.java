@@ -1,6 +1,7 @@
 package org.nekobehemoth.utils;
 
 public class PerformanceTestUtils {
+
     public static void performanceTest(Runnable function, String implementationName) {
         Runtime runtime = Runtime.getRuntime();
         Long startTime = System.currentTimeMillis();
