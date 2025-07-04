@@ -11,7 +11,7 @@ import org.nekobehemoth.utils.PerformanceTestUtils;
 public class FibonacciPerformanceTest {
 
     //private static final int[] input = {10, 20, 30, 35, 45, 60, 70};
-    private static final int[] input = {100, 1000, 10000, 100000, 1000000};
+    private static final int[] input = {100, 1000, 10000, 100000, 1000000, 10000000};
     FibonacciAlgorithms fib = new FibonacciAlgorithms();
 
     @Test

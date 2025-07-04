@@ -15,6 +15,11 @@ public class TestRunnerTest {
         System.out.println("Before Each");
     }
 
+    @AfterEach
+    void anotherBeforeEach() {
+        System.out.println("After Each" );
+    }
+
     @Test
     void addCustomListTestWithError() {
         String band = "The Beatles";
@@ -27,5 +32,12 @@ public class TestRunnerTest {
         String band = "The Beatles";
         myList.add(band);
         assertEquals(band, myList.get(0));
+    }
+
+    @Test
+    void throwOtherError() {
+        String band = "The Beatles";
+        myList.add(band);
+        throw new RuntimeException("Some error in code");
     }
 }

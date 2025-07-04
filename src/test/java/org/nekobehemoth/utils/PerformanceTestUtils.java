@@ -9,7 +9,7 @@ public class PerformanceTestUtils {
         Long endTime = System.currentTimeMillis();
         Long memoryAfter = runtime.totalMemory() - runtime.freeMemory();
         double duration = endTime - startTime;
-        long memoryUsed = (memoryAfter - memoryBefore);
-        System.out.printf("%s implementation worked %f ms, memory used: %d\n", implementationName, duration, memoryUsed);
+        double memoryUsed = ((double) memoryAfter - memoryBefore) / (1024 * 1024);
+        System.out.printf("%s implementation worked %f ms, memory used: %.2f MB\n", implementationName, duration, memoryUsed);
     }
 }

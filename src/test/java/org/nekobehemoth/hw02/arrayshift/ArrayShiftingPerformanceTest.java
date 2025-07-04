@@ -11,8 +11,9 @@ public class ArrayShiftingPerformanceTest {
 
     @Test
     void testFibonacciRealizationPerformance(){
-        for (int size : arraySizes) {
-            for (int position : positions) {
+
+        for (int position : positions) {
+            for (int size : arraySizes) {
                 System.out.printf("-------------Array size: %d; Shift position: %d-------------\n",  size, position);
                 PerformanceTestUtils.performanceTest(() -> ArrayOperations.shiftLeftSystemCopy(new int[size], position), "System");
                 PerformanceTestUtils.performanceTest( () -> ArrayOperations.shiftLeftManualLoop(new int[size], position), "Manual");
