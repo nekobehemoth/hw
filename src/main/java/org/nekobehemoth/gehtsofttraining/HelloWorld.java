@@ -1,4 +1,4 @@
-package org.example;
+package org.nekobehemoth.gehtsofttraining;
 
 public class HelloWorld {
 
