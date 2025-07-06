@@ -1,4 +1,4 @@
-package org.nekobehemoth.gehtsofttraining;
+package org.nekobehemoth.hw01;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;

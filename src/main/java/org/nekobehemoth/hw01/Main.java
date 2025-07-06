@@ -1,4 +1,4 @@
-package org.nekobehemoth.gehtsofttraining;
+package org.nekobehemoth.hw01;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
