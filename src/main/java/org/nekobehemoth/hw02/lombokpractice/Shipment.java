@@ -10,4 +10,5 @@ public class Shipment {
     private Long id;
     private Date shipDate;
     private String createUser;
+    private final String item;
 }

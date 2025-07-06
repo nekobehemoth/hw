@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 
 public class TestRunner {
 
-
     private static int classCount = 0;
     private static int testMethodCount = 0;
     private static int successMethodCount = 0;

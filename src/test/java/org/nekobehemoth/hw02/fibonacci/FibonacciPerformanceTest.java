@@ -28,7 +28,7 @@ public class FibonacciPerformanceTest {
         System.out.println("It looks like Iterative implementation is logarithm complexity - O(log n)");
         System.out.println("But if you check with bigger values you will see the linear complexity O(n)");
         System.out.println("""
-                Memorized implementation is something  between O(n) and O(n log n). Should beO(n),\s
+                Memorized implementation is something  between O(n) and O(n log n). Should be O(n),\s
                 because we make one unique calculation and repeated take from cache,\s
                 but because of array copy it broke ideal complexity""");
         System.out.println("------------------------------------------------------");
