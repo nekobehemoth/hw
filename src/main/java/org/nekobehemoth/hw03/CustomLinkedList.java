@@ -1,5 +1,6 @@
 package org.nekobehemoth.hw03;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class CustomLinkedList<E> implements List<E>, Deque<E> {
@@ -94,7 +95,6 @@ public class CustomLinkedList<E> implements List<E>, Deque<E> {
         return deletedItem;
     }
 
-
     @Override
     public E getLast() {
         final Node<E> l = last;
@@ -149,12 +149,27 @@ public class CustomLinkedList<E> implements List<E>, Deque<E> {
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        Object[] result = new Object[size];
+        int index = 0;
+        for (Node<E> i = first; i != null; i = i.next) {
+            result[index] = i.item;
+            index++;
+        }
+        return result;
     }
 
     @Override
     public <T> T[] toArray(T[] a) {
-        return null;
+        if (size > a.length) {
+            a = (T[]) Array.newInstance(a.getClass().getComponentType(), size);
+        }
+        Object[] result = a;
+        int j = 0;
+        for (Node<E> i = first; i != null; i = i.next) {
+            result[j++] = i.item;
+        }
+        if (size > a.length) a[size] = null;
+        return a;
     }
 
     public CustomLinkedList<E> reversed() {
@@ -213,7 +228,7 @@ public class CustomLinkedList<E> implements List<E>, Deque<E> {
 
     @Override
     public boolean removeLastOccurrence(Object o) {
-        int index = lastIndexOf(0);
+        int index = lastIndexOf(o);
         if (index < 0) return false;
         remove(index);
         return true;
@@ -221,7 +236,7 @@ public class CustomLinkedList<E> implements List<E>, Deque<E> {
 
     @Override
     public boolean offer(E e) {
-        return add(e);
+        return offerLast(e);
     }
 
     @Override
@@ -246,7 +261,7 @@ public class CustomLinkedList<E> implements List<E>, Deque<E> {
 
     @Override
     public void push(E e) {
-
+        addFirst(e);
     }
 
     @Override
@@ -312,7 +327,16 @@ public class CustomLinkedList<E> implements List<E>, Deque<E> {
 
     @Override
     public void clear() {
-
+        for (Node<E> i = first; i != null;) {
+            Node<E> next = i.next;
+            i.prev = null;
+            i.item = null;
+            i.next = null;
+            i = next;
+        }
+        first = null;
+        last = null;
+        size = 0;
     }
 
     @Override
@@ -330,31 +354,42 @@ public class CustomLinkedList<E> implements List<E>, Deque<E> {
 
     @Override
     public void add(int index, E element) {
-
+        if (index == size) {
+            addLast(element);
+            return;
+        }
+        if (index == 0) {
+            addFirst(element);
+            return;
+        };
+        final Node<E> found = getElementByIndex(index);
+        System.out.println(element);
+        Node<E> prev = found.prev;
+        prev.next = new Node<>(found.prev, element, found);
+        size++;
     }
 
     @Override
     public E remove(int index) {
         Node<E> found = getElementByIndex(index);
-        unlink(found);
-        return found.item;
+        return unlink(found);
     }
 
     private Node<E> getElementByIndex(int index) {
-        if (index > size) throw new IllegalArgumentException();
+        checkIndex(index);
+        Node<E> found;
         if (index < (size / 2)) {
-            Node<E> found = first;
+            found = first;
             for (int i = 0; i < index; i++) {
                 found = found.next;
             }
-            return found;
         } else {
-            Node<E> found = last;
+            found = last;
             for(int i = size - 1; i > index; i--) {
                 found = found.prev;
             }
-            return found;
         }
+        return found;
     }
 
     @Override
@@ -376,7 +411,7 @@ public class CustomLinkedList<E> implements List<E>, Deque<E> {
 
     @Override
     public int lastIndexOf(Object o) {
-        int index = size;
+        int index = size - 1;
         if (o == null) {
             for (Node<E> i = last; i != null; i = i.prev) {
                 if (i.item == null) return index;
@@ -393,12 +428,12 @@ public class CustomLinkedList<E> implements List<E>, Deque<E> {
 
     @Override
     public ListIterator<E> listIterator() {
-        return null;
+        return new LstIter(0);
     }
 
     @Override
     public ListIterator<E> listIterator(int index) {
-        return null;
+        return new LstIter(index);
     }
 
     @Override
@@ -493,6 +528,11 @@ public class CustomLinkedList<E> implements List<E>, Deque<E> {
             nextIndex++;
             return lastReturned.item;
         }
+    }
+
+    private void checkIndex(int index) {
+        if (index + 1 > size || index < 0)
+            throw new IndexOutOfBoundsException(String.format("Index: %d, Size: %d", index, size));
     }
 
     private static class Node<E> {
