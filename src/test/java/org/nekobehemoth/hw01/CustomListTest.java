@@ -241,6 +241,10 @@ class CustomListTest {
             list.add(i);
         }
         assertEquals(20, list.size());
+        assertEquals(0, list.get(0));
+        assertEquals(5, list.get(5));
+        assertEquals(10, list.get(10));
+        assertEquals(19, list.get(19));
     }
 
     @ParameterizedTest(name = "{0} should have the same size as amount of initialized items and items should be on their own places")

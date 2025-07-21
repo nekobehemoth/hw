@@ -35,7 +35,7 @@ public class TestRunner {
             if (!annotationsMethodMap.isEmpty()) classMethodMap.put(c, annotationsMethodMap);
         }
         Long startTime = System.currentTimeMillis();
-        if (!classMethodMap.isEmpty()) annotationHandler(classMethodMap);
+        if (!classMethodMap.isEmpty()) handleSupportedAnnotations(classMethodMap);
         Long endTime = System.currentTimeMillis();
         double duration = endTime - startTime;
         System.out.println("______________");
@@ -126,7 +126,7 @@ public class TestRunner {
                 .collect(Collectors.toSet());
     }
 
-    private static void annotationHandler(Map<Class<?>, Map<Method, List<SupportedAnnotations>>> classMethodMap) {
+    private static void handleSupportedAnnotations(Map<Class<?>, Map<Method, List<SupportedAnnotations>>> classMethodMap) {
         classMethodMap.forEach((cl, annotationsMethodMap) -> {
             Set<Method> beforeEachMethods = getMethodWithAnnotation(annotationsMethodMap, SupportedAnnotations.BEFORE_EACH);
             Set<Method> testMethods = getMethodWithAnnotation(annotationsMethodMap, SupportedAnnotations.TEST);

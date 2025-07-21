@@ -74,7 +74,7 @@ public class CustomList<E> implements List<E> {
         int minCapacity = size + 1;
         if (oldCapacity > 0) {
             int newCapacity = oldCapacity + Math.max(minCapacity, oldCapacity >> 1);
-            return new Object[newCapacity];
+            return Arrays.copyOf(array, newCapacity);
         } else {
             return new Object[DEFAULT_CAPACITY];
         }
