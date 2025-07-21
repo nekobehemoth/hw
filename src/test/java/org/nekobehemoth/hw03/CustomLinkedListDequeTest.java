@@ -21,7 +21,7 @@ public class CustomLinkedListDequeTest {
     }
 
 
-    @ParameterizedTest(name = "When add element as first it should be at very beginning")
+    @ParameterizedTest(name = "{0}  When add element as first it should be at very beginning")
     @MethodSource("linkedListImplementationDeque")
     void addFirstTest(String implName, Deque<String> listImpl) {
         String band_1 = "The Beatles";
@@ -33,7 +33,7 @@ public class CustomLinkedListDequeTest {
         assertEquals(band_1, listImpl.getLast());
     }
 
-    @ParameterizedTest(name = "When add element as last it should be in the end")
+    @ParameterizedTest(name = "{0}  When add element as last it should be in the end")
     @MethodSource("linkedListImplementationDeque")
     void addLastTest(String implName, Deque<String> listImpl) {
         String band_1 = "The Beatles";
@@ -45,7 +45,7 @@ public class CustomLinkedListDequeTest {
         assertEquals(band_1, listImpl.getFirst());
     }
 
-    @ParameterizedTest(name = "When add element as first it should be at very beginning")
+    @ParameterizedTest(name = "{0}  When add element as first it should be at very beginning")
     @MethodSource("linkedListImplementationDeque")
     void offerFirstTest(String implName, Deque<String> listImpl) {
         String band_1 = "The Beatles";
@@ -57,7 +57,7 @@ public class CustomLinkedListDequeTest {
         assertEquals(band_1, listImpl.getLast());
     }
 
-    @ParameterizedTest(name = "When add element as last it should be in the end")
+    @ParameterizedTest(name = "{0}  When add element as last it should be in the end")
     @MethodSource("linkedListImplementationDeque")
     void offerLastTest(String implName, Deque<String> listImpl) {
         String band_1 = "The Beatles";
@@ -70,7 +70,7 @@ public class CustomLinkedListDequeTest {
     }
 
 
-    @ParameterizedTest(name = "After removing first element it shouldn't be present in list")
+    @ParameterizedTest(name = "{0}  After removing first element it shouldn't be present in list")
     @MethodSource("linkedListImplementationDeque")
     void removeFirstTest(String implName, Deque<String> listImpl) {
         String band_1 = "The Beatles";
@@ -86,7 +86,7 @@ public class CustomLinkedListDequeTest {
         assertFalse(listImpl.contains(band_2));
     }
 
-    @ParameterizedTest(name = "After removing last element it shouldn't be present in list")
+    @ParameterizedTest(name = "{0}  After removing last element it shouldn't be present in list")
     @MethodSource("linkedListImplementationDeque")
     void removeLastTest(String implName, Deque<String> listImpl) {
         String band_1 = "The Beatles";
@@ -103,7 +103,7 @@ public class CustomLinkedListDequeTest {
         assertFalse(listImpl.contains(band_1));
     }
 
-    @ParameterizedTest(name = "When we pollFirst item should be returned and it shouldn't be present in list in the end")
+    @ParameterizedTest(name = "{0}  When we pollFirst item should be returned and it shouldn't be present in list in the end")
     @MethodSource("linkedListImplementationDeque")
     void pollFirstTest(String implName, Deque<String> listImpl) {
         String band_1 = "The Beatles";
@@ -120,7 +120,7 @@ public class CustomLinkedListDequeTest {
         assertFalse(listImpl.contains(band_2));
     }
 
-    @ParameterizedTest(name = "After removing last element it shouldn't be present in list")
+    @ParameterizedTest(name = "{0}  After removing last element it shouldn't be present in list")
     @MethodSource("linkedListImplementationDeque")
     void pollLastTest(String implName, Deque<String> listImpl) {
         String band_1 = "The Beatles";
@@ -139,7 +139,7 @@ public class CustomLinkedListDequeTest {
         assertFalse(listImpl.contains(band_1));
     }
 
-    @ParameterizedTest(name = "When we getFirst item should be returned but not deleted")
+    @ParameterizedTest(name = "{0}  When we getFirst item should be returned but not deleted")
     @MethodSource("linkedListImplementationDeque")
     void getFirstTest(String implName, Deque<String> listImpl) {
         String band_1 = "The Beatles";
@@ -153,13 +153,13 @@ public class CustomLinkedListDequeTest {
         assertTrue(listImpl.contains(band_2));
     }
 
-    @ParameterizedTest(name = "When we getFirst from empty list the error should be thrown")
+    @ParameterizedTest(name = "{0}  When we getFirst from empty list the error should be thrown")
     @MethodSource("linkedListImplementationDeque")
     void getFirstFromEmptyArrayTest(String implName, Deque<String> listImpl) {
         assertThrows(NoSuchElementException.class, listImpl::getFirst);
     }
 
-    @ParameterizedTest(name = "When we getLast item should be returned but not deleted")
+    @ParameterizedTest(name = "{0}  When we getLast item should be returned but not deleted")
     @MethodSource("linkedListImplementationDeque")
     void getLastTest(String implName, Deque<String> listImpl) {
         String band_1 = "The Beatles";
@@ -172,13 +172,13 @@ public class CustomLinkedListDequeTest {
         assertTrue(listImpl.contains(band_1));
     }
 
-    @ParameterizedTest(name = "When we getLast from empty list the error should be thrown")
+    @ParameterizedTest(name = "{0}  When we getLast from empty list the error should be thrown")
     @MethodSource("linkedListImplementationDeque")
     void getLastFromEmptyArrayTest(String implName, Deque<String> listImpl) {
         assertThrows(NoSuchElementException.class, listImpl::getLast);
     }
 
-    @ParameterizedTest(name = "When we getFirst item should be returned but not deleted")
+    @ParameterizedTest(name = "{0}  When we getFirst item should be returned but not deleted")
     @MethodSource("linkedListImplementationDeque")
     void peekFirstTest(String implName, Deque<String> listImpl) {
         String band_1 = "The Beatles";
@@ -192,13 +192,13 @@ public class CustomLinkedListDequeTest {
         assertTrue(listImpl.contains(band_1));
     }
 
-    @ParameterizedTest(name = "When we getFirst from empty list no error should be thrown")
+    @ParameterizedTest(name = "{0}  {0}  When we getFirst from empty list no error should be thrown")
     @MethodSource("linkedListImplementationDeque")
     void peekFirstFromEmptyArrayTest(String implName, Deque<String> listImpl) {
         assertDoesNotThrow(listImpl::peekFirst);
     }
 
-    @ParameterizedTest(name = "When we getLast item should be returned but not deleted")
+    @ParameterizedTest(name = "{0}  {0}  When we getLast item should be returned but not deleted")
     @MethodSource("linkedListImplementationDeque")
     void peekLastTest(String implName, Deque<String> listImpl) {
         String band_1 = "The Beatles";
@@ -211,14 +211,14 @@ public class CustomLinkedListDequeTest {
         assertTrue(listImpl.contains(band_1));
     }
 
-    @ParameterizedTest(name = "When we peekLast from empty list no error should be thrown")
+    @ParameterizedTest(name = "{0}  {0}  When we peekLast from empty list no error should be thrown")
     @MethodSource("linkedListImplementationDeque")
     void peekLastFromEmptyArrayTest(String implName, Deque<String> listImpl) {
         assertDoesNotThrow(listImpl::peekLast);
     }
 
 
-    @ParameterizedTest(name = "When add element as first it should be at very beginning")
+    @ParameterizedTest(name = "{0}  {0}  When add element as first it should be at very beginning")
     @MethodSource("linkedListImplementationDeque")
     void removeFirstOccurrenceTest(String implName, Deque<String> listImpl) {
         String band_1 = "The Beatles";
@@ -238,7 +238,7 @@ public class CustomLinkedListDequeTest {
         assertEquals(2, listImpl.size());
     }
 
-    @ParameterizedTest(name = "When add element as first it should be at very beginning")
+    @ParameterizedTest(name = "{0}  {0}  When add element as first it should be at very beginning")
     @MethodSource("linkedListImplementationDeque")
     void removeLastOccurrenceTest(String implName, Deque<String> listImpl) {
         String band_1 = "The Beatles";
@@ -259,6 +259,43 @@ public class CustomLinkedListDequeTest {
     }
 
 
+    @ParameterizedTest(name = "{0}  {0}  Remove it almost the same as removeFirstOccurrence")
+    @MethodSource("linkedListImplementationDeque")
+    void removeTest(String implName, Deque<String> listImpl) {
+        String band_1 = "The Beatles";
+        String band_2 = "Behemoth";
+        listImpl.addFirst(band_1);
+        listImpl.addLast(band_2);
+        listImpl.addLast(band_1);
+        assertEquals(3, listImpl.size());
+        assertEquals(band_1, listImpl.getFirst());
+        assertEquals(band_1, listImpl.getLast());
+        //After adding the bands, we have a hamburger like "The Beatles" "Behemoth" "The Beatles"
+        //After deleting the first occurrence of The Beatles, Behemoth will be first
+        assertTrue(listImpl.remove(band_1));
+        assertEquals(band_2, listImpl.getFirst());
+        //Only the last The Beatles occurrence will remain
+        assertEquals(band_1, listImpl.getLast());
+        assertEquals(2, listImpl.size());
+    }
 
+    @ParameterizedTest(name = "{0}  {0}  Removing from empty list or non existing element should return false")
+    @MethodSource("linkedListImplementationDeque")
+    void removeFromEmptyListTest(String implName, Deque<String> listImpl) {
+        String band_1 = "The Beatles";
+        assertFalse(listImpl.remove(band_1));
+    }
+
+
+    @ParameterizedTest(name = "{0} when peek element, returns first one")
+    @MethodSource("linkedListImplementationDeque")
+    void testPeek(String implName, Deque<String> listImpl) {
+        String band_1 = "The Beatles";
+        String band_2 = "Behemoth";
+        listImpl.addLast(band_1);
+        listImpl.addLast(band_2);
+        assertEquals(band_1, listImpl.peek());
+        assertEquals(listImpl.getFirst(), listImpl.peek());
+    }
 
 }

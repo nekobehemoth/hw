@@ -5,6 +5,10 @@ import java.util.Iterator;
 import java.util.Queue;
 
 public class CustomQueue<E> implements Queue<E> {
+
+    //Queue represent First In - First Out behaviour
+
+
     CustomLinkedList<E> linkedList;
 
     public CustomQueue() {
@@ -41,14 +45,17 @@ public class CustomQueue<E> implements Queue<E> {
         return linkedList.toArray(a);
     }
 
+
+    //Elements added to the end of queue
     @Override
     public boolean add(E e) {
-        return linkedList.add(e);
+        linkedList.add(e);
+        return true;
     }
 
     @Override
     public boolean remove(Object o) {
-        return linkedList.remove(o);
+        return linkedList.removeLastOccurrence(o);
     }
 
     @Override
@@ -88,7 +95,7 @@ public class CustomQueue<E> implements Queue<E> {
 
     @Override
     public E poll() {
-        return linkedList.poll();
+        return linkedList.pollFirst();
     }
 
     @Override
@@ -100,4 +107,7 @@ public class CustomQueue<E> implements Queue<E> {
     public E peek() {
         return linkedList.peek();
     }
+
+    @Override
+    public String toString() {return linkedList.toString();}
 }

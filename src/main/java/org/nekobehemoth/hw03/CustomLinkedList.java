@@ -363,9 +363,9 @@ public class CustomLinkedList<E> implements List<E>, Deque<E> {
             return;
         };
         final Node<E> found = getElementByIndex(index);
-        System.out.println(element);
         Node<E> prev = found.prev;
-        prev.next = new Node<>(found.prev, element, found);
+        prev.next = new Node<>(prev, element, found);
+        found.prev = prev.next;
         size++;
     }
 

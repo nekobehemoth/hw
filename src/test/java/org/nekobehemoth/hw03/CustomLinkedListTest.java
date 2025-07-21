@@ -213,4 +213,28 @@ public class CustomLinkedListTest {
         assertThrows(IndexOutOfBoundsException.class, () -> list.set(-1, null));
     }
 
+
+    @ParameterizedTest(name = "{0} must add element to pointed index")
+    @MethodSource("linkedListImplementationList")
+    void testAddByIndex(String arrayName, List<String> list) {
+        String band_1 = "The Beatles";
+        String band_2 = "Behemoth";
+        String band_3 = "Deep Purple";
+        list.add( band_1);
+        list.add(band_3);
+        list.add(1, band_2);
+        assertTrue(list.contains(band_2));
+        assertEquals(band_2, list.get(1));
+    }
+
+    @ParameterizedTest(name = "{0} must throw error if add to index more than or equal size")
+    @MethodSource("linkedListImplementationList")
+    void testAddByIndexThrowError(String arrayName, List<String> list) {
+        String band_1 = "The Beatles";
+        String band_2 = "Behemoth";
+        String band_3 = "Deep Purple";
+        list.add( band_1);
+        list.add(band_3);
+        assertThrows(IndexOutOfBoundsException.class, () -> list.add(3, band_2));
+    }
 }

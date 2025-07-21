@@ -1,5 +1,7 @@
 package org.nekobehemoth.hw03;
 
+import java.util.EmptyStackException;
+
 public class CustomStack<E> {
     CustomLinkedList<E> customLinkedList;
 
@@ -9,16 +11,22 @@ public class CustomStack<E> {
     }
 
     public E push(E item) {
-        customLinkedList.addFirst(item);
+        customLinkedList.addLast(item);
         return item;
     }
 
-    public E pop() {
-        return  customLinkedList.pop();
+    public boolean add(E item) {
+        return customLinkedList.add(item);
     }
 
-    public E peep() {
-        return customLinkedList.peek();
+    public E pop() {
+        if (customLinkedList.isEmpty()) throw new EmptyStackException();
+        return  customLinkedList.removeLast();
+    }
+
+    public E peek() {
+        if (customLinkedList.isEmpty()) throw new EmptyStackException();
+        return customLinkedList.getLast();
     }
 
     public boolean empty(){
@@ -26,6 +34,19 @@ public class CustomStack<E> {
     }
 
     public int search(Object o) {
-        return customLinkedList.lastIndexOf(o);
+        int index = customLinkedList.lastIndexOf(o);
+        if (index >= 0) return customLinkedList.size() - index;
+        return -1;
     }
+
+    public boolean contains(Object o) {
+        return customLinkedList.contains(o);
+    }
+
+    @Override
+    public String toString() {
+        return customLinkedList.toString();
+    }
+
+
 }
