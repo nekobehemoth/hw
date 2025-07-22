@@ -9,8 +9,6 @@ public class CustomLinkedList<E> implements List<E>, Deque<E> {
     private Node<E> last;
     private int size;
 
-
-
     public void addFirst(E item) {
         final Node<E> f = first;
         final Node<E> newNode = new Node<>(null, item, f);
@@ -159,6 +157,7 @@ public class CustomLinkedList<E> implements List<E>, Deque<E> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T> T[] toArray(T[] a) {
         if (size > a.length) {
             a = (T[]) Array.newInstance(a.getClass().getComponentType(), size);
@@ -297,31 +296,6 @@ public class CustomLinkedList<E> implements List<E>, Deque<E> {
                 };
             }
         }
-        return false;
-    }
-
-    @Override
-    public boolean containsAll(Collection<?> c) {
-        return false;
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends E> c) {
-        return false;
-    }
-
-    @Override
-    public boolean addAll(int index, Collection<? extends E> c) {
-        return false;
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        return false;
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
         return false;
     }
 
@@ -545,5 +519,32 @@ public class CustomLinkedList<E> implements List<E>, Deque<E> {
             this.item = item;
             this.next = next;
         }
+    }
+
+    //Not implemented
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        return false;
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends E> c) {
+        return false;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return false;
     }
 }

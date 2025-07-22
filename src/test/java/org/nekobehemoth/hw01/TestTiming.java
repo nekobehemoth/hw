@@ -1,9 +1,6 @@
 package org.nekobehemoth.hw01;
 
-<<<<<<< HEAD:src/test/java/org/nekobehemoth/hw01/TestTiming.java
-=======
 import lombok.Getter;
->>>>>>> develop:src/test/java/org/nekobehemoth/gehtsofttraining/TestTiming.java
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
