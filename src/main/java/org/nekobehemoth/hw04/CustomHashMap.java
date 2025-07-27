@@ -12,14 +12,12 @@ public class CustomHashMap<K, V> implements Map<K, V> {
     private int size;
     private int deletedItemsAmount;
     private CustomEntry<K,V>[] entries;
-    private ReadWriteLock[] locks;
     private static final int DEFAULT_SIZE = 10;
     private static final double DEFAULT_LOAD = 0.75;
     private int buffered_size;
 
     public CustomHashMap() {
         this.entries = new CustomEntry[DEFAULT_SIZE];
-        this.locks = new ReadWriteLock[DEFAULT_SIZE];
         buffered_size = DEFAULT_SIZE;
         deletedItemsAmount = 0;
     }
@@ -178,7 +176,6 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         if (futureSize >= buffered_size) buffered_size *= 2;
         CustomEntry<K,V>[] old_array = entries;
         entries = new CustomEntry[buffered_size];
-        locks = new ReadWriteLock[buffered_size];
         for (CustomEntry<K, V> customEntry : old_array) {
            if (customEntry != null && !customEntry.isDeleted())  putEntry(customEntry);
         }
