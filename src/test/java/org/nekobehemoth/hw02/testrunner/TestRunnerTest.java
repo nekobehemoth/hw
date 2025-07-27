@@ -3,7 +3,7 @@ package org.nekobehemoth.hw02.testrunner;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.nekobehemoth.gehtsofttraining.CustomList;
+import org.nekobehemoth.hw01.CustomList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestRunnerTest {

@@ -1,7 +1,6 @@
-package org.nekobehemoth.gehtsofttraining;
+package org.nekobehemoth.hw01;
 
 import lombok.Getter;
-import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
