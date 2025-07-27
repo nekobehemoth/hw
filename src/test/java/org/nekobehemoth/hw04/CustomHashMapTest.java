@@ -201,6 +201,8 @@ public class CustomHashMapTest {
         hashMapImpl.put(3, BAND_3);
         Set<Map.Entry<Integer,String>> entrySet = hashMapImpl.entrySet();
         assertEquals(3, entrySet.size());
+        //Bug or feature?
+        //hashMapImpl.remove(2);
         List<Integer> keyList = entrySet.stream().map(Map.Entry::getKey).toList();
         List<String> valueList = entrySet.stream().map(Map.Entry::getValue).toList();
         assertEquals(3, keyList.size());

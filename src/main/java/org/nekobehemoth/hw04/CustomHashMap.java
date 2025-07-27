@@ -105,7 +105,6 @@ public class CustomHashMap<K, V> implements Map<K, V> {
     public V remove(Object key) {
         if ((size + deletedItemsAmount) > 2 * size) {
             rehash();
-
         }
         CustomEntry<K,V> found =  getEntry(key);
         if (found != null) {
@@ -137,7 +136,7 @@ public class CustomHashMap<K, V> implements Map<K, V> {
 
     @Override
     public Set<K> keySet() {
-        return Arrays.stream(entries).filter(Objects::nonNull).map(CustomEntry::getKey).collect(Collectors.toSet());
+        return Arrays.stream(entries).filter(entry -> entry != null && !entry.isDeleted()).map(CustomEntry::getKey).collect(Collectors.toSet());
     }
 
     @Override
@@ -150,7 +149,7 @@ public class CustomHashMap<K, V> implements Map<K, V> {
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return Arrays.stream(entries).filter(Objects::nonNull).collect(Collectors.toSet());
+        return Arrays.stream(entries).filter(entry -> entry != null && !entry.isDeleted()).collect(Collectors.toSet());
     }
 
 
@@ -200,7 +199,6 @@ public class CustomHashMap<K, V> implements Map<K, V> {
         private boolean deleted = false;
         private final K key;
         private V value;
-        private CustomEntry<K,V> next;
 
         CustomEntry(K key, V value) {
             this.key = key;
