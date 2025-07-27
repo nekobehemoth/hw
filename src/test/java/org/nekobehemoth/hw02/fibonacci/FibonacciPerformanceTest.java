@@ -3,11 +3,8 @@ package org.nekobehemoth.hw02.fibonacci;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.nekobehemoth.gehtsofttraining.TestTiming;
+import org.nekobehemoth.hw01.TestTiming;
 import org.nekobehemoth.utils.PerformanceTestUtils;
-
-import java.util.List;
-import java.util.Map;
 
 
 @ExtendWith(TestTiming.class)
