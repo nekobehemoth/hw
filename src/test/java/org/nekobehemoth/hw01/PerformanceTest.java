@@ -2,10 +2,11 @@ package org.nekobehemoth.hw01;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
+import org.nekobehemoth.hw03.CustomLinkedList;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +20,8 @@ public class PerformanceTest {
         return Stream.of(
                 Arguments.of("CustomList", new CustomList<Integer>()),
                 Arguments.of("ArrayList", new ArrayList<Integer>()),
-                Arguments.of("LinkedList", new LinkedList<Integer>())
+                Arguments.of("LinkedList", new LinkedList<Integer>()),
+                Arguments.of("CustomLinkedList", new CustomLinkedList<Integer>())
         );
     }
 
