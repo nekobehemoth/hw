@@ -7,7 +7,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.nekobehemoth.hw03.CustomLinkedList;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
