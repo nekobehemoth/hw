@@ -171,17 +171,17 @@ public class CustomList<E> implements List<E> {
     }
 
     @Override
-    public ListIterator listIterator() {
+    public ListIterator<E> listIterator() {
         return null;
     }
 
     @Override
-    public ListIterator listIterator(int index) {
+    public ListIterator<E> listIterator(int index) {
         return null;
     }
 
     @Override
-    public List subList(int fromIndex, int toIndex) {
+    public List<E> subList(int fromIndex, int toIndex) {
         return List.of();
     }
 
@@ -209,7 +209,7 @@ public class CustomList<E> implements List<E> {
     }
 
     @Override
-    public Iterator iterator() {
+    public Iterator<E> iterator() {
         return null;
     }
 }

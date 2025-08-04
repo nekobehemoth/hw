@@ -1,12 +1,12 @@
 Number of threads: 1
-Implementation: "Parallel Thread", duration: 0.11
-Implementation: "Parallel Stream", duration: 0.05
+Implementation: "Parallel Stream", duration: 0.06
+Implementation: "Parallel Thread", duration: 0.19
 Number of threads: 10
-Implementation: "Parallel Thread", duration: 0.21
 Implementation: "Parallel Stream", duration: 0.01
+Implementation: "Parallel Thread", duration: 0.22
 Number of threads: 100
-Implementation: "Parallel Thread", duration: 0.12
 Implementation: "Parallel Stream", duration: 0.03
+Implementation: "Parallel Thread", duration: 0.15
 Number of threads: 1000
-Implementation: "Parallel Thread", duration: 0.20
-Implementation: "Parallel Stream", duration: 0.12
+Implementation: "Parallel Stream", duration: 0.19
+Implementation: "Parallel Thread", duration: 0.27
