@@ -1,5 +1,6 @@
 package org.nekobehemoth.hw05.banking;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -8,10 +9,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class Client {
+
     public static void main(String[] args) throws Exception {
        ;
-        Bank beNekoBank = new AtomicBank(200, 0L, 1000L);
-        System.out.println(beNekoBank.getSumOfAllAccounts());
+        Bank beNekoBank = new UnsafeBank(200, 0L, 1000L);
+        BigInteger beforeTransfer = beNekoBank.getSumOfAllAccounts();
 
         try (ExecutorService transferService = Executors.newVirtualThreadPerTaskExecutor()) {
             List<Future<?>> futures = new ArrayList<>();
@@ -36,7 +38,39 @@ public class Client {
                 }
             }
         }
+        BigInteger afterTransfer = beNekoBank.getSumOfAllAccounts();
+        System.out.println("Before money transfer: " + beforeTransfer);
+        System.out.println("After money transfer: " + afterTransfer);
+        System.out.println("Lose: " + (beforeTransfer.subtract(afterTransfer)));
+    }
 
-        System.out.println(beNekoBank.getSumOfAllAccounts());
+    public boolean bankClearing(Bank bank) {
+        BigInteger beforeTransfer = bank.getSumOfAllAccounts();
+
+        try (ExecutorService transferService = Executors.newVirtualThreadPerTaskExecutor()) {
+            List<Future<?>> futures = new ArrayList<>();
+            for (int i = 0; i < 1000; i++) {
+                futures.add(transferService.submit(() -> {
+                    int sender = bank.pickRandomAccountId();
+                    int receiver = bank.pickRandomAccountId();
+                    Random amount = new Random();
+                    try {
+                        bank.transfer(sender, receiver, amount.nextLong(bank.getAccountBalance(sender)));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }));
+            }
+
+            for (Future<?> future : futures) {
+                try {
+                    future.get();
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+        BigInteger afterTransfer = bank.getSumOfAllAccounts();
+        return beforeTransfer.equals(afterTransfer);
     }
 }
