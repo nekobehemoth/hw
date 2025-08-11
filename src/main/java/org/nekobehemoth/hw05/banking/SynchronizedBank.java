@@ -27,7 +27,8 @@ public class SynchronizedBank implements Bank {
     }
 
     @Override
-    public synchronized BigInteger getSumOfAllAccounts() {
+    public synchronized
+    BigInteger getSumOfAllAccounts() {
         return unsafeBank.getSumOfAllAccounts();
     }
 
