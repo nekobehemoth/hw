@@ -41,16 +41,26 @@ public class LockedBank implements Bank {
 
     @Override
     public long deposit(int accountId, long amount) throws Exception {
-        return unsafeBank.deposit(accountId, amount);
+        lock.lock();
+        long result = unsafeBank.deposit(accountId, amount);
+        lock.unlock();
+        return result;
     }
 
     @Override
     public long withdraw(int accountId, long amount) throws Exception {
-        return unsafeBank.withdraw(accountId, amount);
+        lock.lock();
+        long result = unsafeBank.withdraw(accountId, amount);
+        lock.unlock();
+        return result;
     }
 
     @Override
-    public synchronized long transfer(int senderAccountId, int receiverAccountId, long amount) throws Exception {
-        return unsafeBank.transfer(senderAccountId, receiverAccountId, amount);
+    public long transfer(int senderAccountId, int receiverAccountId, long amount) throws Exception {
+
+        lock.lock();
+        long result = unsafeBank.transfer(senderAccountId, receiverAccountId, amount);
+        lock.unlock();
+        return result;
     }
 }

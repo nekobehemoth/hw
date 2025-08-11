@@ -12,7 +12,7 @@ public class Client {
 
     public static void main(String[] args) throws Exception {
        ;
-        Bank beNekoBank = new UnsafeBank(200, 0L, 1000L);
+        Bank beNekoBank = new SynchronizedBank(200, 0L, 1000L);
         BigInteger beforeTransfer = beNekoBank.getSumOfAllAccounts();
 
         try (ExecutorService transferService = Executors.newVirtualThreadPerTaskExecutor()) {

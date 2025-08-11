@@ -12,32 +12,32 @@ public class SynchronizedBank implements Bank {
 
 
     @Override
-    public int pickRandomAccountId() {
+    public synchronized int pickRandomAccountId() {
         return unsafeBank.pickRandomAccountId();
     }
 
     @Override
-    public long getAccountBalance(int accountId) throws Exception {
+    public synchronized long getAccountBalance(int accountId) throws Exception {
         return unsafeBank.getAccountBalance(accountId);
     }
 
     @Override
-    public void setAccountBalance(int accountId, long newBalance) throws Exception {
+    public synchronized void setAccountBalance(int accountId, long newBalance) throws Exception {
         unsafeBank.setAccountBalance(accountId, newBalance);
     }
 
     @Override
-    public BigInteger getSumOfAllAccounts() {
+    public synchronized BigInteger getSumOfAllAccounts() {
         return unsafeBank.getSumOfAllAccounts();
     }
 
     @Override
-    public long deposit(int accountId, long amount) throws Exception {
+    public synchronized long deposit(int accountId, long amount) throws Exception {
         return unsafeBank.deposit(accountId, amount);
     }
 
     @Override
-    public long withdraw(int accountId, long amount) throws Exception {
+    public synchronized long withdraw(int accountId, long amount) throws Exception {
         return unsafeBank.withdraw(accountId, amount);
     }
 
