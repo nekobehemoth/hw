@@ -1,0 +1,214 @@
+document.addEventListener("DOMContentLoaded", function(event) {
+    if (document.querySelector('.sendgrid-subscription-widget') !== null && typeof window.sg_widget_loaded == 'undefined') {  
+        window.sg_widget_loaded = true;
+        
+
+        var submit_btns = document.getElementsByClassName("sg-submit-btn");
+
+        if (submit_btns.length > 0) {
+            for (var i = 0; i < submit_btns.length; i++) {
+              
+                submit_btns[i].addEventListener("click",function(e){
+                    e.preventDefault();
+
+                
+                    var widget_id = this.id;
+                    var submit_btn = document.getElementById(widget_id);
+
+                    var widget_instance = document.querySelector("."+widget_id).closest(".sendgrid-subscription-widget");
+                    var form = widget_instance.getElementsByClassName("sg-widget");
+
+                    var first_name_field = widget_instance.getElementsByClassName("sg_signup_first_name");
+                    if (first_name_field.length > 0) {
+                        first_name = stripHTML(first_name_field[0].value);
+                        if (!first_name && typeof widget_instance.dataset.nameerror != 'undefined') {
+                            name_error = widget_instance.dataset.nameerror;
+                            first_name_field[0].className += ' required';
+                            show_response(name_error, 'error', widget_instance);
+                            return;
+                        }
+                        first_name_field[0].classList.remove('required');
+                    } 
+
+                    var last_name_field = widget_instance.getElementsByClassName("sg_signup_last_name");
+                    if (last_name_field.length > 0) {
+                        last_name = stripHTML(last_name_field[0].value);
+                        if (!last_name && typeof widget_instance.dataset.nameerror != 'undefined') {
+                            name_error = widget_instance.dataset.nameerror;
+                            last_name_field[0].className += ' required';
+                            show_response(name_error, 'error', widget_instance);
+                            return;
+                        }
+                        last_name_field[0].classList.remove('required');
+                    } 
+
+                    var email_field = widget_instance.getElementsByClassName("sg_email");
+                    var email = stripHTML(email_field[0].value);                 
+                    if(!email || !isValidEmailAddress(email)) {             
+                        var email_error = 'Please enter a valid email address'
+                        if (typeof widget_instance.dataset.emailerror != 'undefined') {
+                            email_error = widget_instance.dataset.emailerror;
+                        } 
+                        email_field[0].className += ' required';
+                        show_response(email_error, 'error', widget_instance);
+                        return;
+                    }
+                    email_field[0].classList.remove('required');
+
+                    
+                    //get and post custom form fields if they exist
+                    var custom_fields = [];
+                    if (document.querySelector('.sg_custom') !== null) {
+                        custom_fields_input = widget_instance.getElementsByClassName("sg_custom");
+                          
+                        for(var i = 0; i < custom_fields_input.length; i++) {
+                          
+                            custom_fields[i] = {};
+                                           
+                            if (custom_fields_input[i].hasAttribute('required')) {
+
+                                if (custom_fields_input[i].type == 'checkbox' && !custom_fields_input[i].checked == true || custom_fields_input[i].value == '' || custom_fields_input[i].value == 'sg_placeholder') {
+
+                                    custom_fields_input[i].className += ' required';
+                                  
+                                    submit_btn.disabled = false; 
+                                    if (typeof widget_instance.dataset.customfieldserror != 'undefined') {
+                                        customfieldserror = widget_instance.dataset.customfieldserror;
+                                    } 
+
+                                    show_response(customfieldserror, 'error', widget_instance);
+                                    return;
+                                } 
+                            } 
+
+                            //set the value of checkbox inputs to yes if checked
+                            if (custom_fields_input[i].type == 'checkbox' && custom_fields_input[i].checked == true) {
+                                custom_fields_input[i].value = 'yes';
+                            }
+
+                            custom_fields_input[i].classList.remove('required');
+                            custom_fields[i]['key'] = custom_fields_input[i].name;
+                            custom_fields[i]['value'] = stripHTML(custom_fields_input[i].value);
+
+                        }
+                    }
+
+                    var sg_consent_checkbox = widget_instance.getElementsByClassName("sg_consent_checkbox");
+                    if (sg_consent_checkbox.length > 0) {
+                        if (!sg_consent_checkbox[0].checked == true) {
+
+                            var checkbox_error = 'Please tick the box to accept our conditions'
+                            if (typeof widget_instance.dataset.checkboxerror != 'undefined') {
+                                checkbox_error = widget_instance.dataset.checkboxerror;
+                            }
+                            sg_consent_checkbox[0].className += ' required';
+                            show_response(checkbox_error, 'error', widget_instance);
+                            return;
+                        } 
+                        sg_consent_checkbox[0].classList.remove('required');
+                    } 
+
+           
+                    submit_btn.disabled = true; 
+                    submitFormAjax(widget_instance, widget_id, submit_btn, custom_fields, email, form[0].dataset.token);
+                  
+                },false);
+            }
+        }
+        
+      
+        function submitFormAjax(widget_instance, widget_id, submit_btn, custom_fields, email, token)
+        {
+            var url = 'https://app.sgwidget.com/v2/api/newsletter-signup';
+            //var url = 'https://sgwidget3.1.test/v2/api/newsletter-signup';
+            
+            var first_name = '';
+            var last_name = '';
+
+
+            var first_name_field = widget_instance.getElementsByClassName("sg_signup_first_name");
+            if (first_name_field.length > 0) {
+                first_name = stripHTML(first_name_field[0].value);
+            } 
+
+            var last_name_field = widget_instance.getElementsByClassName("sg_signup_last_name");
+            if (last_name_field.length > 0) {
+                last_name = stripHTML(last_name_field[0].value);
+            } 
+
+            var data = new FormData();
+            data.append('email', email);
+            data.append('first_name', first_name);
+            data.append('last_name', last_name);
+            data.append('token', token);
+
+            if (custom_fields.length > 0) {
+                data.append('custom_fields', JSON.stringify(custom_fields));
+            } 
+
+            var xmlhttp = window.XMLHttpRequest ?
+                new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+
+            xmlhttp.open("POST", url, true);
+            xmlhttp.onload = function () {
+                var resp = JSON.parse(xmlhttp.responseText);
+                if (xmlhttp.status == 200) {
+                    if(resp.message.indexOf('error') !== -1) {
+                        submit_btn.disabled = false; 
+                        show_response(resp.message, 'error', widget_instance);
+                    } else {
+                        console.log('SG Widget ID '+widget_id+' form submit complete');
+                        handle_successful_signup(widget_instance, resp, email, first_name, last_name);
+                    }
+                } else if (xmlhttp.status == 500) {
+                    show_response(resp.message, 'error', widget_instance);
+
+                }
+            };
+            xmlhttp.send(data);
+        }
+
+        function handle_successful_signup(widget_instance, response, email, first_name, last_name) {
+            if (response.success_redirect_url && response.success_redirect_url != '') {
+        
+                /*response.success_redirect_url = response.success_redirect_url + "?email="+email;
+
+                if (first_name != false) {
+                    response.success_redirect_url = response.success_redirect_url + "&first_name="+first_name;
+                }
+
+                if (last_name != false) {
+                    response.success_redirect_url = response.success_redirect_url + "&last_name="+last_name;
+                }*/
+
+                window.location = response.success_redirect_url;
+            } else {
+                show_response(response.message, 'success', widget_instance);
+            }
+        }
+
+        function show_response(response, resp_class, widget_instance) {
+           
+            var response_field = widget_instance.getElementsByClassName("sg-response");
+            //we have to get the response div and then assign the first element to another array or .className doesn't work
+            var response_field_inner = response_field[0];
+
+            response_field_inner.className = '';
+            response_field_inner.className += 'sg-response '+resp_class;
+            response_field_inner.innerHTML = response;
+            response_field_inner.style.display = 'block';
+            return;
+        }
+
+        function stripHTML(text){
+           var regex = /(<([^>]+)>)/ig;
+           return text.replace(regex, "");
+        }
+
+        function isValidEmailAddress(emailAddress) {
+            var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+            return pattern.test(emailAddress);
+        };
+
+    }
+});

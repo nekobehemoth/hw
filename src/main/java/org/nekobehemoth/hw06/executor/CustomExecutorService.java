@@ -17,43 +17,37 @@ public class CustomExecutorService implements ExecutorService {
     private final Set<Worker> workers = new HashSet<>();
     private final AtomicInteger activeTasks;
     private final AtomicInteger completedTasks;
-    private boolean isShutdown;
-    private boolean useVirtualThreads;
+    private volatile boolean isShutdown;
+    private volatile boolean terminated = false;
+    private final boolean useVirtualThreads;
     private final ReentrantLock lock = new ReentrantLock();
 
-    private CustomExecutorService(int corePoolSize) {
-        activeTasks = new AtomicInteger();
-        completedTasks = new AtomicInteger();
-        queue = new LinkedBlockingQueue<>();
-        ThreadFactory threadFactory = Thread.ofPlatform().factory();
+    private static final Runnable SHUTDOWN = () -> {};
+
+    public CustomExecutorService(int corePoolSize, boolean useVirtualThreads) {
+        this.useVirtualThreads = useVirtualThreads;
+        this.activeTasks = new AtomicInteger();
+        this.completedTasks = new AtomicInteger();
+        this.queue = new LinkedBlockingQueue<>();
+        ThreadFactory threadFactory = useVirtualThreads ? Thread.ofVirtual().factory() : Thread.ofPlatform().factory();
         for (int i = 0; i < corePoolSize; i++) {
             Worker worker = new Worker(threadFactory);
-            workers.add(worker);
+            this.workers.add(worker);
             worker.getThread().start();
         }
-    }
-
-    private CustomExecutorService(boolean useVirtualThreads) {
-        this.useVirtualThreads = useVirtualThreads;
-        activeTasks = new AtomicInteger();
-        completedTasks = new AtomicInteger();
-        queue = new LinkedBlockingQueue<>();
-        ThreadFactory threadFactory = Thread.ofVirtual().factory();
-        Worker worker = new Worker(threadFactory);
-        worker.getThread().start();
-    }
-
-    public static CustomExecutorService newFixedThreadPool(int corePoolSize) {
-        return new CustomExecutorService(corePoolSize);
-    }
-
-    public static CustomExecutorService newVirtualThreadPerTaskExecutor() {
-        return new CustomExecutorService(true);
     }
 
     @Override
     public void shutdown() {
         isShutdown = true;
+        lock.lock();
+        try {
+            for (int i = 0; i < workers.size(); i++) {
+                queue.offer(SHUTDOWN);
+            }
+        } finally {
+            lock.unlock();
+        }
     }
 
     @Override
@@ -68,15 +62,16 @@ public class CustomExecutorService implements ExecutorService {
 
     @Override
     public boolean isTerminated() {
-        return false;
+        return terminated;
     }
 
     @Override
     public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
         long convertToNano = unit.toNanos(timeout);
         long timeoutOver = System.nanoTime() + convertToNano;
+
         while (System.nanoTime() < timeoutOver) {
-            if (activeTasks.get() == 0 && queue.isEmpty()) {
+            if (activeTasks.get() == 0 && queue.isEmpty() && isTerminated()) {
                 return true;
             }
             Thread.sleep(10);
@@ -86,17 +81,29 @@ public class CustomExecutorService implements ExecutorService {
 
     @Override
     public <T> Future<T> submit(Callable<T> task) {
-        return null;
+        if (task == null)
+            throw new NullPointerException();
+        FutureTask<T> futureTask = new FutureTask<>(task);
+        execute(futureTask);
+        return futureTask;
     }
 
     @Override
     public <T> Future<T> submit(Runnable task, T result) {
-        return new FutureTask<T>(task, result);
+        if (task == null)
+            throw new NullPointerException();
+        FutureTask<T> futureTask = new FutureTask<>(task, result);
+        execute(futureTask);
+        return futureTask;
     }
 
     @Override
     public Future<?> submit(Runnable task) {
-        return new FutureTask<Object>(task, null);
+        if (task == null)
+            throw new NullPointerException();
+        FutureTask<?> futureTask = new FutureTask<>(task, null);
+        execute(futureTask);
+        return futureTask;
     }
 
     @Override
@@ -120,11 +127,13 @@ public class CustomExecutorService implements ExecutorService {
     }
 
     @Override
-    public void execute(Runnable command) {
-        if (isShutdown && activeTasks.get() > 0) throw new RejectedExecutionException("Shutting down, pool size = "
+    public void execute(Runnable task) {
+        if (task == null)
+            throw new NullPointerException();
+        if (isShutdown) throw new RejectedExecutionException("Shutting down, pool size = "
                 + queue.size()
                 + ", active threads = " + activeTasks);
-        queue.add(command);
+        queue.add(task);
     }
 
 
@@ -142,37 +151,49 @@ public class CustomExecutorService implements ExecutorService {
 
         @Override
         public void run() {
-            while (true) {
-                Runnable task = null;
+            try {
+                while (true) {
+                    Runnable task = null;
+                    try {
+                        if (isShutdown() && queue.isEmpty()) break;
+                        task = queue.take();
+                        if (task == SHUTDOWN) {
+                            break;
+                        }
+                    } catch (InterruptedException e) {
+                        continue;
+                    }
+                    activeTasks.incrementAndGet();
+                    try {
+                        if (useVirtualThreads) {
+                            Runnable finalTask = task;
+                            threadFactory.newThread(() -> {
+                                try {
+                                    finalTask.run();
+                                } finally {
+                                    completedTasks.incrementAndGet();
+                                    activeTasks.decrementAndGet();
+                                }
+                            }).start();
+                        } else {
+                            task.run();
+                        }
+                    } finally {
+                        if (!useVirtualThreads) {
+                            completedTasks.incrementAndGet();
+                            activeTasks.decrementAndGet();
+                        }
+                    }
+                }
+            } finally {
                 lock.lock();
                 try {
-                    if (isShutdown() && queue.isEmpty()) break;
-                    task = queue.take();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                    workers.remove(this);
+                    if (workers.isEmpty()) {
+                        terminated = true;
+                    }
                 } finally {
                     lock.unlock();
-                }
-                activeTasks.incrementAndGet();
-                try {
-                    if (useVirtualThreads) {
-                        Runnable finalTask = task;
-                        threadFactory.newThread(() -> {
-                            try {
-                                finalTask.run();
-                            } finally {
-                                completedTasks.incrementAndGet();
-                                activeTasks.decrementAndGet();
-                            }
-                        }).start();
-                    } else {
-                        task.run();
-                    }
-                } finally {
-                    if (!useVirtualThreads) {
-                        completedTasks.incrementAndGet();
-                        activeTasks.decrementAndGet();
-                    }
                 }
             }
         }
