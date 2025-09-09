@@ -41,13 +41,13 @@ public class ControllerScan {
             }
             for (Method method : cl.getMethods()) {
                 for (Annotation annotation : method.getAnnotations()) {
-                    Class<? extends Annotation> annotationCass = annotation.annotationType();
-                    HttpMethod httpAnnotation = annotationCass.getAnnotation(HttpMethod.class);
+                    Class<? extends Annotation> annotationClass = annotation.annotationType();
+                    HttpMethod httpAnnotation = annotationClass.getAnnotation(HttpMethod.class);
                     if (httpAnnotation != null) {
                         String httpMethod = httpAnnotation.value();
-                        if (method.isAnnotationPresent(annotationCass)) {
-                            Annotation annotationInstance = method.getAnnotation(annotationCass);
-                            Method value = annotationCass.getMethod("value");
+                        if (method.isAnnotationPresent(annotationClass)) {
+                            Annotation annotationInstance = method.getAnnotation(annotationClass);
+                            Method value = annotationClass.getMethod("value");
                             String path = (String) value.invoke(annotationInstance);
                             HttpMethodHandler methodHandler = methodHandlerMap.get(httpMethod);
                             if (methodHandler == null) {
